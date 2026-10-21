@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EARLY_CUTOFF, EARLY_FEE, naira } from "@/lib/event";
+import { EARLY_CUTOFF } from "@/lib/event";
 
 function parts(target: number, now: number) {
   const diff = Math.max(0, target - now);
@@ -32,9 +32,7 @@ export function Countdown() {
   return (
     <div className="mt-8 max-w-xl">
       <p className="text-sm font-medium tracking-wide text-sky">
-        {left.done
-          ? "Early rate has closed. Seats are now ₦250,000."
-          : `Early rate of ${naira(EARLY_FEE)} ends 15 November`}
+        {left.done ? "Early rate has closed." : "Early rate ends 15 November"}
       </p>
       {!left.done && (
         <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">

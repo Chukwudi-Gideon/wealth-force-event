@@ -132,10 +132,18 @@ export function BookingFlow({ mode, onClose }: Props) {
                 ? "Day 2 · 28 November 2026 · Business masterclass · 100 seats"
                 : "Day 1 · 27 November 2026 · Free virtual day"}
             </p>
+            {mode === "paid" && (
+              <div className="flex items-baseline justify-between rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
+                <span className="text-sm text-sky">
+                  {amount === 150000 ? "Early rate until 15 November" : "Standard rate"}
+                </span>
+                <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
+              </div>
+            )}
             <Field label="Full name" value={name} onChange={setName} autoComplete="name" />
             <Field label="Email address" value={email} onChange={setEmail} type="email" autoComplete="email" />
             <Field
-              label={mode === "paid" ? "Whatsapp number" : "Whatsapp number (optional)"}
+              label={mode === "paid" ? "WhatsApp number" : "WhatsApp number (optional)"}
               value={phone}
               onChange={setPhone}
               type="tel"
@@ -268,7 +276,7 @@ function Field({
     <label className="grid gap-1 text-sm text-sky">
       {label}
       <input
-        required={label !== "Phone number (optional)"}
+        required={label !== "WhatsApp number (optional)"}
         type={type}
         value={value}
         autoComplete={autoComplete}

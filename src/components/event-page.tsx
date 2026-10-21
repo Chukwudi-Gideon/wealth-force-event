@@ -10,8 +10,6 @@ import {
   SUPPORT_PHONE,
   SUPPORT_PHONE_TEL,
   VENUE,
-  feeNaira,
-  naira,
 } from "@/lib/event";
 
 type Flow = "paid" | "waitlist" | null;
@@ -19,14 +17,13 @@ type Flow = "paid" | "waitlist" | null;
 export function EventPage() {
   const [flow, setFlow] = useState<Flow>(null);
   const [menu, setMenu] = useState(false);
-  const fee = feeNaira();
 
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
           <a href="#top" className="shrink-0" aria-label="ROCKBANQ home">
-            <img src="/logo.png" alt="ROCKBANQ" className="h-8 w-auto" />
+            <img src="/logo.png" alt="ROCKBANQ" className="h-8 w-auto max-w-[8rem] object-contain" />
           </a>
           <nav className="hidden items-center gap-6 text-xs font-medium tracking-widest text-navy uppercase lg:flex">
             <a href="#vault" className="hover:text-blue">
@@ -80,18 +77,18 @@ export function EventPage() {
         <div className="hero-mesh pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-5">
           <p className="inline-flex items-center gap-2 rounded-full border border-paper/20 bg-paper/10 px-4 py-2 text-xs font-medium tracking-widest text-violet uppercase">
-            <span className="live-dot size-2 rounded-full bg-orange" />
+            <span className="size-2 rounded-full bg-orange" />
             ROCKBANQ presents
           </p>
-          <h1 className="hero-rise mt-6 max-w-4xl text-6xl leading-none font-medium tracking-tight sm:text-7xl lg:text-8xl">
+          <h1 className="mt-6 max-w-4xl text-6xl leading-none font-medium tracking-tight sm:text-7xl lg:text-8xl">
             Wealth Force <span className="text-orange">2026</span>
           </h1>
-          <p className="hero-fade mt-6 max-w-xl text-lg text-sky">
+          <p className="mt-6 max-w-xl text-lg text-sky">
             Two days that change how your family and your business sees money. Start free online, then step into
             the room.
           </p>
           <Countdown />
-          <div className="hero-fade mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
               onClick={() => setFlow("paid")}
@@ -108,12 +105,6 @@ export function EventPage() {
           </div>
           <p className="mt-6 text-sm text-sky">
             Day 1 · 27 November · free, online. Day 2 · 28 November · Port Harcourt.
-          </p>
-        </div>
-        <div className="relative mt-12 overflow-hidden border-t border-paper/15 bg-navy-deep/60 py-4">
-          <p className="marquee-track text-sm tracking-widest text-sky uppercase">
-            Earn. Build. Multiply. Preserve. <span className="text-orange">Earn. Build. Multiply. Preserve.</span>{" "}
-            Earn. Build. Multiply. Preserve.
           </p>
         </div>
       </section>
@@ -242,16 +233,12 @@ export function EventPage() {
               <h3 className="mt-3 text-3xl font-medium">Day 2 · 28 November 2026</h3>
               <p className="mt-2 text-sky">Port Harcourt</p>
               <p className="mt-4 text-sky">A focused, in-person session with only 100 seats.</p>
-              <p className="mt-4 text-lg font-medium text-orange">
-                {naira(fee)} {fee === 150000 ? "until 15 November" : "standard rate"}
-              </p>
-              <p className="text-sm text-sky">₦150,000 early. ₦250,000 after 15 November.</p>
               <button
                 type="button"
                 onClick={() => setFlow("paid")}
                 className="mt-8 inline-flex h-12 items-center justify-center self-start rounded-full bg-orange px-5 text-base font-medium text-navy-deep"
               >
-                Reserve my place
+                Reserve
               </button>
             </article>
           </div>
@@ -260,7 +247,7 @@ export function EventPage() {
 
       <footer className="border-t border-line bg-paper py-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-         <img src="/logo.png" alt="" className="h-8 w-auto max-w-[7rem] shrink-0 self-start object-contain sm:self-auto" />
+          <img src="/logo.png" alt="" className="h-8 w-auto max-w-[7rem] shrink-0 self-start object-contain sm:self-auto" />
           <p>
             <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:text-blue">
               {SUPPORT_EMAIL}
