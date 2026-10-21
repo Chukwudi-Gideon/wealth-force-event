@@ -1,8 +1,8 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { X } from "lucide-react";
-import { claimBankTransfer, joinDayOne, startCheckout } from "@/lib/checkout.functions";
-import { BANK, SUCCESS_COPY, SUPPORT_PHONE, WHATSAPP_URL, feeNaira, naira } from "@/lib/event";
+import { joinDayOne, startCheckout } from "@/lib/checkout.functions";
+import { SUCCESS_COPY, SUPPORT_PHONE, WHATSAPP_URL, feeNaira, naira } from "@/lib/event";
 
 type Mode = "paid" | "waitlist";
 
@@ -11,12 +11,11 @@ type Props = {
   onClose: () => void;
 };
 
-type Step = "details" | "pay" | "claimed" | "waitlist-done";
+type Step = "details" | "waitlist-done";
 
 export function BookingFlow({ mode, onClose }: Props) {
   const titleId = useId();
   const start = useServerFn(startCheckout);
-  const claim = useServerFn(claimBankTransfer);
   const waitlist = useServerFn(joinDayOne);
   const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
@@ -24,9 +23,7 @@ export function BookingFlow({ mode, onClose }: Props) {
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [reference, setReference] = useState("");
   const [amount, setAmount] = useState(() => feeNaira());
-  const [emailed, setEmailed] = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -54,8 +51,6 @@ export function BookingFlow({ mode, onClose }: Props) {
           setError(result.error);
           return;
         }
-        setReference(result.reference);
-        setEmailed(result.emailed);
         setStep("waitlist-done");
         return;
       }
@@ -67,32 +62,11 @@ export function BookingFlow({ mode, onClose }: Props) {
         return;
       }
       setAmount(result.amount);
-      setReference(result.reference);
       if (result.mode === "paystack") {
         window.location.assign(result.authorizationUrl);
         return;
       }
-      setStep("pay");
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function onClaimed() {
-    setError("");
-    setBusy(true);
-    try {
-      const result = await claim({
-        data: { name, email, phone, kind: "paid", origin: window.location.origin, reference },
-      });
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-      setEmailed(result.emailed);
-      setStep("claimed");
+      setError("Payment could not start. Please try again, or WhatsApp us.");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -133,11 +107,14 @@ export function BookingFlow({ mode, onClose }: Props) {
                 : "Day 1 · 27 November 2026 · Free virtual day"}
             </p>
             {mode === "paid" && (
-              <div className="flex items-baseline justify-between rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
-                <span className="text-sm text-sky">
-                  {amount === 150000 ? "Early rate until 15 November" : "Standard rate"}
-                </span>
-                <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
+              <div className="rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm text-sky">
+                    {amount === 150000 ? "Early rate until 15 November" : amount === 250000 ? "Standard rate" : "Amount"}
+                  </span>
+                  <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
+                </div>
+                <p className="mt-2 text-sm text-sky">The amount must be exact.</p>
               </div>
             )}
             <Field label="Full name" value={name} onChange={setName} autoComplete="name" />
@@ -160,83 +137,21 @@ export function BookingFlow({ mode, onClose }: Props) {
           </form>
         )}
 
-        {step === "pay" && (
+        {step === "waitlist-done" && (
           <div>
             <h2 id={titleId} className="pr-8 text-2xl font-medium">
-              Pay by transfer
-            </h2>
-            <p className="mt-2 text-sm text-sky">
-              Paystack is not connected on this preview yet, so use the company account. This is not a confirmed
-              payment until the transfer is seen.
-            </p>
-            <div className="mt-4 flex items-baseline justify-between rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
-              <span className="text-sm text-sky">Amount</span>
-              <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
-            </div>
-            <dl className="mt-3 rounded-2xl border border-paper/12 bg-paper/5 px-4">
-              <Row label="Bank" value={BANK.bankName} />
-              <Row label="Account number" value={BANK.accountNumber} />
-              <Row label="Account name" value={BANK.accountName} />
-              <Row label="Reference" value={reference} />
-            </dl>
-            <p className="mt-3 text-sm text-sky">Use the reference as your transfer narration.</p>
-            {error && <p className="mt-3 text-sm text-orange">{error}</p>}
-            <button
-              type="button"
-              disabled={busy}
-              onClick={onClaimed}
-              className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-full bg-orange px-5 text-base font-medium text-navy-deep disabled:opacity-50"
-            >
-              {busy ? "Sending…" : "I have made the transfer"}
-            </button>
-          </div>
-        )}
-
-        {step === "claimed" && (
-          <div>
-            <h2 id={titleId} className="pr-8 text-2xl font-medium">
-              Transfer noted, {name.split(" ")[0]}
+              You’re on the Day 1 list
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-sky">
-              This is not a payment confirmation. Your ticket will be sent after the transfer is confirmed on the
-              account. If you do not hear from us, contact us on WhatsApp or call {SUPPORT_PHONE}.
+              We’ll send the virtual-day details to {email} before 27 November. If you don’t see it, WhatsApp us on{" "}
+              {SUPPORT_PHONE}.
             </p>
-            {!emailed && (
-              <p className="mt-3 text-sm text-orange">
-                The automatic note to the team did not send. Please WhatsApp or call us with reference {reference}{" "}
-                so your number is not lost.
-              </p>
-            )}
             <a
               href={WHATSAPP_URL}
               className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-blue px-5 text-base font-medium text-paper"
             >
               WhatsApp us
             </a>
-          </div>
-        )}
-
-        {step === "waitlist-done" && (
-          <div>
-            <h2 id={titleId} className="pr-8 text-2xl font-medium">
-              You are on the Day 1 list
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-sky">
-              We will send the virtual-day details to {email}. Reference {reference}.
-            </p>
-            {!emailed && (
-              <p className="mt-3 text-sm text-orange">
-                The automatic note to the team did not send. Email {email} and your name to the team on WhatsApp or{" "}
-                {SUPPORT_PHONE} so your place is recorded.
-              </p>
-            )}
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-blue px-5 text-base font-medium text-paper"
-            >
-              Close
-            </button>
           </div>
         )}
       </div>
@@ -284,14 +199,5 @@ function Field({
         className="h-12 rounded-xl border border-paper/20 bg-paper/10 px-3 text-base text-paper outline-none placeholder:text-sky/70"
       />
     </label>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 border-b border-paper/10 py-3 text-sm last:border-b-0">
-      <dt className="text-sky">{label}</dt>
-      <dd className="text-right font-medium">{value}</dd>
-    </div>
   );
 }
