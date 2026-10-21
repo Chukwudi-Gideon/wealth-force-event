@@ -28,10 +28,9 @@ export const DAY_TWO = new Date("2026-11-28T08:00:00.000Z");
 
 export const EARLY_FEE = 150_000;
 export const REGULAR_FEE = 250_000;
-export const TEST_FEE: number | null = 1000;
+
 
 export function feeNaira(now = new Date()): number {
-  if (TEST_FEE != null) return TEST_FEE;
   return now.getTime() <= EARLY_CUTOFF.getTime() ? EARLY_FEE : REGULAR_FEE;
 }
 

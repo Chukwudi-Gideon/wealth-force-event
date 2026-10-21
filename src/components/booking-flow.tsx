@@ -114,7 +114,7 @@ export function BookingFlow({ mode, onClose }: Props) {
                   </span>
                   <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
                 </div>
-                <p className="mt-2 text-sm text-sky">The amount must be exact.</p>
+                <p className="text-sm text-sky">The amount must be exactly as shown above.</p>
               </div>
             )}
             <Field label="Full name" value={name} onChange={setName} autoComplete="name" />
