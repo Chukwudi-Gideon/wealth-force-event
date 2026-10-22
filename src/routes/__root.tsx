@@ -16,11 +16,11 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { property: "og:title", content: APP_NAME },
       { property: "og:description", content: DESCRIPTION },
-      { property: "og:image", content: "/og.jpg" },
+      { property: "og:image", content: "/logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: APP_NAME },
       { name: "twitter:description", content: DESCRIPTION },
-      { name: "twitter:image", content: "/og.jpg" },
+      { name: "twitter:image", content: "/logo.png" },
     ],
     links: [
       
