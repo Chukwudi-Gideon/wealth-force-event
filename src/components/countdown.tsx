@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EARLY_CUTOFF } from "@/lib/event";
+import { DAY_TWO } from "@/lib/event";
 
 function parts(target: number, now: number) {
   const diff = Math.max(0, target - now);
@@ -20,8 +20,7 @@ export function Countdown() {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
-
-  const left = parts(EARLY_CUTOFF.getTime(), now);
+  const left = parts(DAY_TWO.getTime(), now);
   const cells = [
     ["Days", left.days],
     ["Hours", left.hours],
@@ -32,7 +31,7 @@ export function Countdown() {
   return (
     <div className="mt-8 max-w-xl">
       <p className="text-sm font-medium tracking-wide text-sky">
-        {left.done ? "Early rate has closed." : "Early rate ends 15 November"}
+                {left.done ? "Early rate has closed." : "Early rate ends 15 November"}
       </p>
       {!left.done && (
         <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">

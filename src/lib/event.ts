@@ -2,7 +2,7 @@ export const SUPPORT_EMAIL = "support@rockbanq.com";
 export const SUPPORT_PHONE = "+234 9049989801";
 export const SUPPORT_PHONE_TEL = "+2349049989801";
 export const WHATSAPP_URL = "https://wa.me/2349049989801";
-export const CEO_EMAIL = "Lancelotchukwudi@gmail.com";
+export const CEO_EMAIL = "sarah@rockbanq.com";
 
 export const VENUE = {
   name: "ROCKBANQ",
@@ -26,12 +26,20 @@ export const EARLY_CUTOFF = new Date("2026-11-15T22:59:59.000Z");
 export const DAY_ONE = new Date("2026-11-27T08:00:00.000Z");
 export const DAY_TWO = new Date("2026-11-28T08:00:00.000Z");
 
-export const EARLY_FEE = 150_000;
-export const REGULAR_FEE = 250_000;
+export const TIERS = [
+  { id: "executive", name: "The Asset Holder", classLabel: "Executive Class", amount: 50_000 },
+  { id: "syndicate", name: "The Syndicate Circle", classLabel: "Group of 5 Class", amount: 150_000 },
+  { id: "vip", name: "The Sovereign Reserve", classLabel: "VIP Class", amount: 250_000 },
+] as const;
 
+export type TierId = (typeof TIERS)[number]["id"];
 
-export function feeNaira(now = new Date()): number {
-  return now.getTime() <= EARLY_CUTOFF.getTime() ? EARLY_FEE : REGULAR_FEE;
+export function tierById(id: string) {
+  return TIERS.find((tier) => tier.id === id) ?? TIERS[0];
+}
+
+export function feeNaira(): number {
+  return TIERS[0].amount;
 }
 
 export function naira(amount: number): string {

@@ -8,6 +8,7 @@ type GuestPayload = {
   kind: GuestKind;
   origin: string;
   reference?: string;
+  tierId?: string;
 };
 
 function asGuest(input: GuestPayload): GuestPayload {
@@ -18,6 +19,7 @@ function asGuest(input: GuestPayload): GuestPayload {
     kind: input?.kind === "waitlist" ? "waitlist" : "paid",
     origin: String(input?.origin ?? ""),
     reference: input?.reference ? String(input.reference) : undefined,
+    tierId: input?.tierId ? String(input.tierId) : undefined,
   };
 }
 

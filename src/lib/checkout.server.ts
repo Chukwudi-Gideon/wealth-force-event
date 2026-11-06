@@ -1,4 +1,4 @@
-import { BANK, CEO_EMAIL, feeNaira, naira } from "./event";
+import { BANK, CEO_EMAIL, feeNaira, naira, tierById } from "./event";
 
 export type GuestKind = "paid" | "waitlist";
 
@@ -8,6 +8,7 @@ export type GuestInput = {
   phone: string;
   kind: GuestKind;
   origin: string;
+  tierId?: string;
 };
 
 export type CheckoutResult =
@@ -78,7 +79,7 @@ export function parseGuest(input: GuestInput): { ok: true; guest: GuestInput } |
   }
   return {
     ok: true,
-    guest: { name, email, phone, kind: input.kind, origin },
+    guest: { name, email, phone, kind: input.kind, origin, tierId: input.tierId },
   };
 }
 
@@ -102,6 +103,7 @@ async function sendTeamEmail(args: {
   guest: GuestInput;
   reference: string;
   amount: number;
+  ticket?: string;
   status: "payment_verified" | "transfer_claimed" | "waitlist";
 }): Promise<{ emailed: boolean; emailError?: string }> {
   const key = resendKey();
@@ -122,6 +124,7 @@ async function sendTeamEmail(args: {
     `Name: ${args.guest.name}`,
     `Email: ${args.guest.email}`,
     `Phone: ${args.guest.phone || "—"}`,
+    args.ticket ? `Ticket: ${args.ticket}` : "",
     `Reference: ${args.reference}`,
     args.guest.kind === "paid" ? `Amount: ${naira(args.amount)}` : "Amount: free",
     args.guest.kind === "paid"
@@ -175,7 +178,9 @@ export async function startPaidCheckout(raw: GuestInput): Promise<CheckoutResult
   const parsed = parseGuest({ ...raw, kind: "paid" });
   if (!parsed.ok) return parsed;
   const guest = parsed.guest;
-  const amount = feeNaira();
+  const tier = tierById(guest.tierId || "executive");
+  const amount = tier.amount;
+  const ticket = `${tier.name} (${tier.classLabel})`;
   const reference = referenceFor("paid");
   const key = paystackKey();
 
@@ -207,9 +212,11 @@ export async function startPaidCheckout(raw: GuestInput): Promise<CheckoutResult
         event: "wealth-force-2026",
         name: guest.name,
         phone: guest.phone,
+        ticket,
         custom_fields: [
           { display_name: "Full name", variable_name: "full_name", value: guest.name },
           { display_name: "Phone", variable_name: "phone", value: guest.phone },
+          { display_name: "Ticket", variable_name: "ticket", value: ticket },
         ],
       },
     }),
@@ -272,7 +279,7 @@ type PaystackVerify = {
     reference?: string;
     amount?: number;
     customer?: { email?: string };
-    metadata?: { name?: string; phone?: string };
+    metadata?: { name?: string; phone?: string; ticket?: string };
   };
 };
 
@@ -304,6 +311,7 @@ export async function verifyPaidReference(reference: string): Promise<VerifyResu
     guest,
     reference: body.data.reference || ref,
     amount,
+    ticket: body.data.metadata?.ticket,
     status: "payment_verified",
   });
   return { ok: true, paid: true, reference: body.data.reference || ref, amount, emailed: mail.emailed };
@@ -358,6 +366,7 @@ export async function handlePaystackWebhook(request: Request): Promise<Response>
       },
       reference: event.data.reference,
       amount,
+      ticket: event.data.metadata?.ticket,
       status: "payment_verified",
     });
   }

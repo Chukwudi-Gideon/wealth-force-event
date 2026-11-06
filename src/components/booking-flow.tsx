@@ -2,10 +2,9 @@ import { useEffect, useId, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { X } from "lucide-react";
 import { joinDayOne, startCheckout } from "@/lib/checkout.functions";
-import { SUCCESS_COPY, SUPPORT_PHONE, WHATSAPP_URL, feeNaira, naira } from "@/lib/event";
+import { SUCCESS_COPY, SUPPORT_PHONE, WHATSAPP_URL, naira, tierById, type TierId } from "@/lib/event";
 
-type Mode = "paid" | "waitlist";
-
+type Mode = "waitlist" | TierId;
 type Props = {
   mode: Mode;
   onClose: () => void;
@@ -22,9 +21,10 @@ export function BookingFlow({ mode, onClose }: Props) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  const [amount, setAmount] = useState(() => feeNaira());
-
+    const [error, setError] = useState("");
+  const tier = mode === "waitlist" ? null : tierById(mode);
+  const [amount, setAmount] = useState(() => (mode === "waitlist" ? 0 : tierById(mode).amount));
+  
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -55,7 +55,7 @@ export function BookingFlow({ mode, onClose }: Props) {
         return;
       }
       const result = await start({
-        data: { name, email, phone, kind: "paid", origin: window.location.origin },
+        data: { name, email, phone, kind: "paid", origin: window.location.origin, tierId: mode },
       });
       if (!result.ok) {
         setError(result.error);
@@ -98,20 +98,18 @@ export function BookingFlow({ mode, onClose }: Props) {
 
         {step === "details" && (
           <form onSubmit={onDetails} className="grid gap-3">
-            <h2 id={titleId} className="pr-8 text-2xl font-medium">
-              {mode === "paid" ? "Reserve my place" : "Join the Day 1 list"}
+                        <h2 id={titleId} className="pr-8 text-2xl font-medium">
+              {mode === "waitlist" ? "Join the Day 1 list" : "Reserve my place"}
             </h2>
             <p className="text-sm text-sky">
-              {mode === "paid"
-                ? "Day 2 · 28 November 2026 · Business masterclass · 100 seats"
-                : "Day 1 · 27 November 2026 · Free virtual day"}
+              {mode === "waitlist"
+                ? "Day 1 · 27 November 2026 · Free virtual day"
+                : `${tier?.name} · ${tier?.classLabel} · 28 November 2026`}
             </p>
-            {mode === "paid" && (
+            {mode !== "waitlist" && (
               <div className="rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-sm text-sky">
-                    {amount === 150000 ? "Early rate until 15 November" : amount === 250000 ? "Standard rate" : "Amount"}
-                  </span>
+                  <span className="text-sm text-sky">{tier?.name}</span>
                   <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
                 </div>
                 <p className="text-sm text-sky">The amount must be exactly as shown above.</p>
@@ -120,7 +118,7 @@ export function BookingFlow({ mode, onClose }: Props) {
             <Field label="Full name" value={name} onChange={setName} autoComplete="name" />
             <Field label="Email address" value={email} onChange={setEmail} type="email" autoComplete="email" />
             <Field
-              label={mode === "paid" ? "WhatsApp number" : "WhatsApp number (optional)"}
+              label={mode === "waitlist" ? "WhatsApp number (optional)" : "WhatsApp number"}
               value={phone}
               onChange={setPhone}
               type="tel"
@@ -132,8 +130,7 @@ export function BookingFlow({ mode, onClose }: Props) {
               disabled={busy}
               className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-orange px-5 text-base font-medium text-navy-deep disabled:opacity-50"
             >
-              {busy ? "Please wait…" : mode === "paid" ? "Continue to payment" : "Join the list"}
-            </button>
+            {busy ? "Please wait…" : mode === "waitlist" ? "Join the list" : "Continue to payment"}     </button>
           </form>
         )}
 

@@ -9,10 +9,13 @@ import {
   SUPPORT_EMAIL,
   SUPPORT_PHONE,
   SUPPORT_PHONE_TEL,
+  TIERS,
   VENUE,
+  naira,
+  type TierId,
 } from "@/lib/event";
 
-type Flow = "paid" | "waitlist" | null;
+type Flow = "waitlist" | TierId | null;
 
 export function EventPage() {
   const [flow, setFlow] = useState<Flow>(null);
@@ -40,13 +43,9 @@ export function EventPage() {
             </a>
           </nav>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setFlow("paid")}
-              className="inline-flex h-11 items-center rounded-full bg-blue px-4 text-sm font-medium text-paper"
-            >
-              Join the event
-            </button>
+            <a href="#register" className="inline-flex h-11 items-center rounded-full bg-blue px-4 text-sm font-medium text-paper">
+  Join the event
+</a>
             <button
               type="button"
               className="grid size-11 place-items-center rounded-full text-navy lg:hidden"
@@ -89,13 +88,12 @@ export function EventPage() {
           </p>
           <Countdown />
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => setFlow("paid")}
-              className="inline-flex h-12 items-center justify-center rounded-full bg-orange px-6 text-base font-medium text-navy-deep"
-            >
-              Reserve my place
-            </button>
+           <a
+  href="#register"
+  className="inline-flex h-12 items-center justify-center rounded-full bg-orange px-6 text-base font-medium text-navy-deep"
+>
+  Reserve my place
+</a>
             <a
               href="#included"
               className="inline-flex h-12 items-center justify-center rounded-full border border-paper/40 px-6 text-base font-medium text-paper"
@@ -210,38 +208,39 @@ export function EventPage() {
         <div className="mx-auto max-w-6xl px-5">
           <p className="text-xs font-medium tracking-widest text-violet uppercase">Register</p>
           <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
-            Two ways to <span className="text-orange">join us.</span>
-          </h2>
-          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <article className="flex flex-col rounded-3xl border border-paper/15 bg-paper/5 p-7">
-              <p className="text-xs font-medium tracking-widest text-violet uppercase">Free · virtual</p>
-              <h3 className="mt-3 text-3xl font-medium">Day 1 · 27 November 2026</h3>
-              <p className="mt-2 text-sky">Online</p>
-              <p className="mt-4 text-sky">
-                Join live from anywhere. No fee, just a seat at the table and a first taste of the masterclass.
-              </p>
-              <button
-                type="button"
-                onClick={() => setFlow("waitlist")}
-                className="mt-8 inline-flex h-12 items-center justify-center self-start rounded-full bg-paper px-5 text-base font-medium text-navy"
-              >
-                Join the list
-              </button>
-            </article>
-            <article className="flex flex-col rounded-3xl border border-orange/40 bg-paper/5 p-7">
-              <p className="text-xs font-medium tracking-widest text-orange uppercase">Paid · 100 seats</p>
-              <h3 className="mt-3 text-3xl font-medium">Day 2 · 28 November 2026</h3>
-              <p className="mt-2 text-sky">Port Harcourt</p>
-              <p className="mt-4 text-sky">A focused, in-person session with only 100 seats.</p>
-              <button
-                type="button"
-                onClick={() => setFlow("paid")}
-                className="mt-8 inline-flex h-12 items-center justify-center self-start rounded-full bg-orange px-5 text-base font-medium text-navy-deep"
-              >
-                Reserve
-              </button>
-            </article>
-          </div>
+  Choose your <span className="text-orange">ticket.</span>
+</h2>
+<div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+  {TIERS.map((tier) => (
+    <article key={tier.id} className="flex flex-col rounded-3xl border border-orange/40 bg-paper/5 p-7">
+      <p className="text-xs font-medium tracking-widest text-orange uppercase">{tier.classLabel}</p>
+      <h3 className="mt-3 text-2xl font-medium">{tier.name}</h3>
+      <p className="mt-2 text-sky">28 November 2026 · Port Harcourt · 10AM</p>
+      <p className="mt-4 text-3xl font-medium text-orange">{naira(tier.amount)}</p>
+      <button
+        type="button"
+        onClick={() => setFlow(tier.id)}
+        className="mt-8 inline-flex h-12 items-center justify-center self-start rounded-full bg-orange px-5 text-base font-medium text-navy-deep"
+      >
+        Reserve
+      </button>
+    </article>
+  ))}
+</div>
+<article className="mt-4 flex flex-col rounded-3xl border border-paper/15 bg-paper/5 p-7 sm:flex-row sm:items-center sm:justify-between">
+  <div>
+    <p className="text-xs font-medium tracking-widest text-violet uppercase">Free · virtual</p>
+    <h3 className="mt-2 text-2xl font-medium">Day 1 · 27 November 2026</h3>
+    <p className="mt-2 text-sky">Online. No fee.</p>
+  </div>
+  <button
+    type="button"
+    onClick={() => setFlow("waitlist")}
+    className="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-paper px-5 text-base font-medium text-navy sm:mt-0"
+  >
+    Join the list
+  </button>
+</article>
         </div>
       </section>
 
