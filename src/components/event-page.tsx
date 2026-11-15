@@ -150,25 +150,33 @@ export function EventPage() {
       <section id="speakers" className="bg-ink-deep py-16 text-paper sm:py-20">
         <div className="mx-auto max-w-6xl px-5">
           <p className="text-xs font-medium tracking-widest text-violet uppercase">Speakers</p>
-          <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
-            Five voices. <span className="text-orange">One stage.</span>
-          </h2>
-          <p className="mt-3 max-w-2xl text-sky">
-            Expect them in the room on the day, not as a quiz on this page. Names will be confirmed closer to the
-            event.
-          </p>
-          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-5">
-            {SPEAKERS.map((speaker) => (
-              <article
-                key={speaker.title}
-                className="rounded-3xl border border-paper/10 bg-navy-deep px-4 py-5 text-left"
-              >
-                <p className="text-xs font-medium tracking-widest text-orange uppercase">At the event</p>
-                <h3 className="mt-3 text-lg font-medium">{speaker.title}</h3>
-                <p className="mt-2 text-sm text-sky">{speaker.body}</p>
-              </article>
-            ))}
-          </div>
+         
+         <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
+  Three voices. <span className="text-orange">One stage.</span>
+</h2>
+<p className="mt-3 max-w-2xl text-sky">
+  In the room on 28 November.
+</p>
+<div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+  {SPEAKERS.map((speaker) => (
+    <article
+      key={speaker.name}
+      className="overflow-hidden rounded-3xl border border-paper/10 bg-navy-deep text-left"
+    >
+      <img
+        src={speaker.image}
+        alt={speaker.name}
+        className="aspect-[4/5] w-full object-cover"
+      />
+      <div className="px-5 py-5">
+        <p className="text-xs font-medium tracking-widest text-orange uppercase">{speaker.role}</p>
+        <h3 className="mt-2 text-xl font-medium">{speaker.name}</h3>
+        <p className="mt-2 text-sm text-sky">{speaker.body}</p>
+      </div>
+    </article>
+  ))}
+</div>
+          
         </div>
       </section>
 

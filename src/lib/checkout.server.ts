@@ -114,14 +114,14 @@ async function sendTeamEmail(args: {
       ? "Paystack payment verified. Add this person to the WhatsApp group manually and send their ticket. Do not email a group link please."
       : args.status === "transfer_claimed"
         ? "Bank transfer claimed by the guest. This is NOT verified yet. Confirm the credit, then add them to the WhatsApp group and send the ticket. Do not email a group link please."
-        : "Day 1 waitlist. Send the virtual-day details to this email. Do not email a WhatsApp group link please.";
-
+       : "Day 1 signup. We have already emailed this person the WhatsApp group link. No action needed unless they say it did not arrive.";
   const text = [
     "Wealth Force 2026",
     "",
     statusLine,
     "",
     `Name: ${args.guest.name}`,
+    args.status === "waitlist" ? `Group link sent: ${DAY_ONE_WHATSAPP}` : "",
     `Email: ${args.guest.email}`,
     `Phone: ${args.guest.phone || "—"}`,
     args.ticket ? `Ticket: ${args.ticket}` : "",
@@ -170,6 +170,49 @@ async function sendTeamEmail(args: {
     const detail = await res.text();
     console.error("[wealth-force] resend failed", res.status, detail.slice(0, 400));
     return { emailed: false, emailError: "We could not email the team automatically. Please call or WhatsApp us." };
+  }
+  return { emailed: true };
+}
+const DAY_ONE_WHATSAPP = "https://chat.whatsapp.com/IHUuX8RGc1nEPvwEUzdv75";
+
+async function sendDayOneEmail(guest: GuestInput): Promise<{ emailed: boolean; emailError?: string }> {
+  const key = resendKey();
+  const from = process.env.RESEND_FROM?.trim() || "Build a Vault <events@rockbanq.com>";
+  if (!key) return { emailed: false, emailError: "Resend is not connected yet." };
+
+  const text = [
+    `Hello ${guest.name},`,
+    "",
+    "You’re on the list for Day 1 of Build a Vault 2026.",
+    "Day 1 is free and virtual on 27 November 2026.",
+    "",
+    "Join the WhatsApp group here:",
+    DAY_ONE_WHATSAPP,
+    "",
+    "That’s where the link and updates will be shared.",
+    "",
+    "See you there,",
+    "ROCKBANQ",
+  ].join("\n");
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [guest.email],
+      subject: "Your Day 1 WhatsApp group · Build a Vault 2026",
+      text,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    console.error("[wealth-force] day 1 email failed", res.status, detail.slice(0, 400));
+    return { emailed: false, emailError: "We could not send the group link by email." };
   }
   return { emailed: true };
 }
@@ -268,6 +311,7 @@ export async function joinWaitlist(raw: GuestInput): Promise<NotifyResult | { ok
     amount: 0,
     status: "waitlist",
   });
+  await sendDayOneEmail(parsed.guest);
   return { ok: true, reference, amount: 0, ...mail };
 }
 

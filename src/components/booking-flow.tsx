@@ -139,10 +139,10 @@ export function BookingFlow({ mode, onClose }: Props) {
             <h2 id={titleId} className="pr-8 text-2xl font-medium">
               You’re on the Day 1 list
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-sky">
-              We’ll send the virtual-day details to {email} before 27 November. If you don’t see it, WhatsApp us on{" "}
-              {SUPPORT_PHONE}.
-            </p>
+           <p className="mt-3 text-sm leading-relaxed text-sky">
+  We’ve emailed the WhatsApp group link to {email}. Check your inbox and spam. If it doesn’t arrive, WhatsApp us on{" "}
+  {SUPPORT_PHONE}.
+</p>
             <a
               href={WHATSAPP_URL}
               className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-blue px-5 text-base font-medium text-paper"

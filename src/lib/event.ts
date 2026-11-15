@@ -74,24 +74,22 @@ export const INCLUDED = [
 
 export const SPEAKERS = [
   {
-    title: "A decade of tech leadership in the South South",
-    body: "Expect ten years as a tech convener who brings people together with ideas and purpose.",
+    name: "Sarah Zion",
+    role: "Founder & CEO, RockBanq",
+    image: "/speakers/ceo.png",
+    body: "Private banker and fintech CEO with 15+ years across banking, insurance, fintech, IT and financial planning. She builds the systems that turn scattered money into a lasting family and business legacy.",
   },
   {
-    title: "A voice in entertainment",
-    body: "Expect a global star whose story travels far beyond the stage.",
+    name: "Mr. Erekosima Inye Boma",
+    role: "Lead Accountant",
+    image: "/speakers/boma.png",
+    body: "Tax and management accountant with over 20 years in reporting, compliance, payroll, budgeting and cost control. He brings the discipline that keeps a business sound and scalable.",
   },
   {
-    title: "A fintech voice",
-    body: "Expect someone shaping how everyday people save, pay and invest.",
-  },
-  {
-    title: "A builder of bold ideas",
-    body: "Expect someone who turns big ideas into real impact.",
-  },
-  {
-    title: "One more guest",
-    body: "Expect a name revealed closer to the day.",
+    name: "Mrs. Tobore Olumoye",
+    role: "Personal Finance Coach",
+    image: "/speakers/tobore.jpeg",
+    body: "Coach, author and trainer with 22+ years in financial services, including as a Financial Planner at Ecobank. She teaches the decisions that turn income into wealth.",
   },
 ] as const;
 export const SUCCESS_COPY =
