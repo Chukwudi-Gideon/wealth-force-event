@@ -9,6 +9,7 @@ type Props = {
   mode: Mode;
   onClose: () => void;
 };
+const dayOneWhatsappLink = "https://chat.whatsapp.com/GSrwjv5UuP19eKQtUeTqNQ"
 
 type Step = "details" | "waitlist-done";
 
@@ -141,14 +142,22 @@ export function BookingFlow({ mode, onClose }: Props) {
             </h2>
            <p className="mt-3 text-sm leading-relaxed text-sky">
   We’ve emailed the WhatsApp group link to {email}. Check your inbox and spam. If it doesn’t arrive, WhatsApp us on{" "}
-  {SUPPORT_PHONE}.
+  {SUPPORT_PHONE}. You can also Join now by clicking the button below.
 </p>
-            <a
-              href={WHATSAPP_URL}
-              className="mt-5 inline-flex h-12 items-center justify-center rounded-full bg-blue px-5 text-base font-medium text-paper"
-            >
-              WhatsApp us
-            </a>
+<div className="mt-6 flex flex-col gap-3 sm:flex-row">
+  <a
+    href={dayOneWhatsappLink}
+    className="inline-flex h-12 items-center justify-center rounded-full bg-orange px-5 text-base font-medium text-navy-deep"
+  >
+    Join the WhatsApp group
+  </a>
+  <a
+    href={WHATSAPP_URL}
+    className="inline-flex h-12 items-center justify-center rounded-full border border-paper/40 px-5 text-base font-medium text-paper"
+  >
+    WhatsApp us
+  </a>
+</div>
           </div>
         )}
       </div>

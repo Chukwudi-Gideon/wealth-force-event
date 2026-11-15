@@ -173,7 +173,7 @@ async function sendTeamEmail(args: {
   }
   return { emailed: true };
 }
-const DAY_ONE_WHATSAPP = "https://chat.whatsapp.com/IHUuX8RGc1nEPvwEUzdv75";
+const DAY_ONE_WHATSAPP = "https://chat.whatsapp.com/GSrwjv5UuP19eKQtUeTqNQ";
 
 async function sendDayOneEmail(guest: GuestInput): Promise<{ emailed: boolean; emailError?: string }> {
   const key = resendKey();
