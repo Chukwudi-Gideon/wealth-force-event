@@ -43,6 +43,8 @@ export type VerifyResult =
       paid: true;
       reference: string;
       amount: number;
+      name?: string;
+      ticket?: string;
       emailed: boolean;
     }
   | { ok: false; error: string };
@@ -358,7 +360,15 @@ export async function verifyPaidReference(reference: string): Promise<VerifyResu
     ticket: body.data.metadata?.ticket,
     status: "payment_verified",
   });
-  return { ok: true, paid: true, reference: body.data.reference || ref, amount, emailed: mail.emailed };
+  return {
+    ok: true,
+    paid: true,
+    reference: body.data.reference || ref,
+    amount,
+    name: body.data.metadata?.name,
+    ticket: body.data.metadata?.ticket,
+    emailed: mail.emailed,
+  };
 }
 
 function safeEqual(a: string, b: string): boolean {

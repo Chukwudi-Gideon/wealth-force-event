@@ -27,9 +27,9 @@ export const DAY_ONE = new Date("2026-11-27T08:00:00.000Z");
 export const DAY_TWO = new Date("2026-11-28T08:00:00.000Z");
 
 export const TIERS = [
-  { id: "executive", name: "The Asset Holder", classLabel: "Executive Class", amount: 50_000 },
-  { id: "syndicate", name: "The Syndicate Circle", classLabel: "Group of 5 Class", amount: 150_000 },
-  { id: "vip", name: "The Sovereign Reserve", classLabel: "VIP Class", amount: 250_000 },
+  { id: "executive", name: "The Asset Holder", classLabel: "Executive Class", amount: 25_000, originalAmount: 50_000 },
+  { id: "syndicate", name: "The Syndicate Circle", classLabel: "Group of 5 Class", amount: 75_000, originalAmount: 150_000 },
+  { id: "vip", name: "The Sovereign Reserve", classLabel: "VIP Class", amount: 125_000, originalAmount: 250_000 },
 ] as const;
 
 export type TierId = (typeof TIERS)[number]["id"];
@@ -91,6 +91,12 @@ export const SPEAKERS = [
     image: "/speakers/tobore.jpeg",
     body: "Coach, author and trainer with 22+ years in financial services, including as a Financial Planner at Ecobank. She teaches the decisions that turn income into wealth.",
   },
+  {
+  name: "Anwuli Isibor",
+  role: "Host & Content Creator",
+  image: "/speakers/anwuli.jpg",
+  body: "Port Harcourt–based host and lifestyle creator focused on wellness and everyday living. Founder of Bouge Club and Top Shots Only, she builds community through conversation and shared experiences.",
+},
 ] as const;
 export const SUCCESS_COPY =
   "Payment received. We will get back to you shortly with your ticket via email or WhatsApp. If there’s any delay, please contact us on WhatsApp or call +234 9049989801.";

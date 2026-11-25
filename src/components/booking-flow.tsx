@@ -1,28 +1,27 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { joinDayOne, startCheckout } from "@/lib/checkout.functions";
-import { SUCCESS_COPY, SUPPORT_PHONE, WHATSAPP_URL, naira, tierById, type TierId } from "@/lib/event";
+import { WHATSAPP_URL, naira, tierById, type TierId } from "@/lib/event";
 
 type Mode = "waitlist" | TierId;
 type Props = {
   mode: Mode;
   onClose: () => void;
 };
-const dayOneWhatsappLink = "https://chat.whatsapp.com/GSrwjv5UuP19eKQtUeTqNQ"
 
-type Step = "details" | "waitlist-done";
 
 export function BookingFlow({ mode, onClose }: Props) {
   const titleId = useId();
+  const navigate = useNavigate();
   const start = useServerFn(startCheckout);
   const waitlist = useServerFn(joinDayOne);
-  const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
-    const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const tier = mode === "waitlist" ? null : tierById(mode);
   const [amount, setAmount] = useState(() => (mode === "waitlist" ? 0 : tierById(mode).amount));
   
@@ -49,17 +48,23 @@ export function BookingFlow({ mode, onClose }: Props) {
           data: { name, email, phone, kind: "waitlist", origin: window.location.origin },
         });
         if (!result.ok) {
-          setError(result.error);
+          console.error("[booking-flow] waitlist failed", result);
+          setError(result.error || "Could not save your Day 1 registration. Please try again, or WhatsApp us.");
           return;
         }
-        setStep("waitlist-done");
+        onClose();
+        await navigate({
+          to: "/thank-you/day-1",
+          search: { name: name.trim(), email: email.trim().toLowerCase() },
+        });
         return;
       }
       const result = await start({
         data: { name, email, phone, kind: "paid", origin: window.location.origin, tierId: mode },
       });
       if (!result.ok) {
-        setError(result.error);
+        console.error("[booking-flow] checkout failed", result);
+        setError(result.error || "Payment could not start. Please try again, or WhatsApp us.");
         return;
       }
       setAmount(result.amount);
@@ -68,7 +73,8 @@ export function BookingFlow({ mode, onClose }: Props) {
         return;
       }
       setError("Payment could not start. Please try again, or WhatsApp us.");
-    } catch {
+    } catch (err) {
+      console.error("[booking-flow] submit failed", err);
       setError("Something went wrong. Please try again.");
     } finally {
       setBusy(false);
@@ -97,8 +103,7 @@ export function BookingFlow({ mode, onClose }: Props) {
           <X className="size-5" />
         </button>
 
-        {step === "details" && (
-          <form onSubmit={onDetails} className="grid gap-3">
+        <form onSubmit={onDetails} className="grid gap-3">
                         <h2 id={titleId} className="pr-8 text-2xl font-medium">
               {mode === "waitlist" ? "Join the Day 1 list" : "Reserve my place"}
             </h2>
@@ -107,11 +112,14 @@ export function BookingFlow({ mode, onClose }: Props) {
                 ? "Day 1 · 27 November 2026 · Free virtual day"
                 : `${tier?.name} · ${tier?.classLabel} · 28 November 2026`}
             </p>
-            {mode !== "waitlist" && (
+            {mode !== "waitlist" && tier && (
               <div className="rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-sm text-sky">{tier?.name}</span>
-                  <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-sm text-sky">{tier.name}</span>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm text-sky/70 line-through">{naira(tier.originalAmount)}</span>
+                    <strong className="text-2xl font-medium text-orange">{naira(amount)}</strong>
+                  </div>
                 </div>
                 <p className="text-sm text-sky">The amount must be exactly as shown above.</p>
               </div>
@@ -133,33 +141,6 @@ export function BookingFlow({ mode, onClose }: Props) {
             >
             {busy ? "Please wait…" : mode === "waitlist" ? "Join the list" : "Continue to payment"}     </button>
           </form>
-        )}
-
-        {step === "waitlist-done" && (
-          <div>
-            <h2 id={titleId} className="pr-8 text-2xl font-medium">
-              You’re on the Day 1 list
-            </h2>
-           <p className="mt-3 text-sm leading-relaxed text-sky">
-  We’ve emailed the WhatsApp group link to {email}. Check your inbox and spam. If it doesn’t arrive, WhatsApp us on{" "}
-  {SUPPORT_PHONE}. You can also Join now by clicking the button below.
-</p>
-<div className="mt-6 flex flex-col gap-3 sm:flex-row">
-  <a
-    href={dayOneWhatsappLink}
-    className="inline-flex h-12 items-center justify-center rounded-full bg-orange px-5 text-base font-medium text-navy-deep"
-  >
-    Join the WhatsApp group
-  </a>
-  <a
-    href={WHATSAPP_URL}
-    className="inline-flex h-12 items-center justify-center rounded-full border border-paper/40 px-5 text-base font-medium text-paper"
-  >
-    WhatsApp us
-  </a>
-</div>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -169,7 +150,9 @@ export function VerifiedMessage({ name }: { name?: string }) {
   return (
     <div className="rounded-3xl border border-paper/15 bg-navy p-6 text-paper sm:p-8">
       <h1 className="text-3xl font-medium">{name ? `Thank you, ${name}.` : "Payment received."}</h1>
-      <p className="mt-4 max-w-xl text-base leading-relaxed text-sky">{SUCCESS_COPY}</p>
+      <p className="mt-4 max-w-xl text-base leading-relaxed text-sky">
+        Your payment is confirmed. We will get back to you shortly with your ticket via email or WhatsApp.
+      </p>
       <a
         href={WHATSAPP_URL}
         className="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-orange px-5 text-base font-medium text-navy-deep"

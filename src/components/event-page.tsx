@@ -152,12 +152,12 @@ export function EventPage() {
           <p className="text-xs font-medium tracking-widest text-violet uppercase">Speakers</p>
          
          <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
-  Three voices. <span className="text-orange">One stage.</span>
+  Four voices. <span className="text-orange">One stage.</span>
 </h2>
 <p className="mt-3 max-w-2xl text-sky">
   In the room on 28 November.
 </p>
-<div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+<div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   {SPEAKERS.map((speaker) => (
     <article
       key={speaker.name}
@@ -224,7 +224,10 @@ export function EventPage() {
       <p className="text-xs font-medium tracking-widest text-orange uppercase">{tier.classLabel}</p>
       <h3 className="mt-3 text-2xl font-medium">{tier.name}</h3>
       <p className="mt-2 text-sky">28 November 2026 · Port Harcourt · 10AM</p>
-      <p className="mt-4 text-3xl font-medium text-orange">{naira(tier.amount)}</p>
+      <div className="mt-4 flex items-baseline gap-3">
+        <p className="text-3xl font-medium text-orange">{naira(tier.amount)}</p>
+        <p className="text-lg text-sky/70 line-through">{naira(tier.originalAmount)}</p>
+      </div>
       <button
         type="button"
         onClick={() => setFlow(tier.id)}

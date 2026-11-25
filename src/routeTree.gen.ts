@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BookingReturnRouteImport } from './routes/booking/return'
+import { Route as ThankYouDay1RouteImport } from './routes/thank-you/day-1'
+import { Route as ThankYouTicketRouteImport } from './routes/thank-you/ticket'
 import { Route as ApiPaystackWebhookRouteImport } from './routes/api/paystack/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +25,16 @@ const BookingReturnRoute = BookingReturnRouteImport.update({
   path: '/booking/return',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThankYouDay1Route = ThankYouDay1RouteImport.update({
+  id: '/thank-you/day-1',
+  path: '/thank-you/day-1',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThankYouTicketRoute = ThankYouTicketRouteImport.update({
+  id: '/thank-you/ticket',
+  path: '/thank-you/ticket',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPaystackWebhookRoute = ApiPaystackWebhookRouteImport.update({
   id: '/api/paystack/webhook',
   path: '/api/paystack/webhook',
@@ -32,30 +44,54 @@ const ApiPaystackWebhookRoute = ApiPaystackWebhookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/booking/return': typeof BookingReturnRoute
+  '/thank-you/day-1': typeof ThankYouDay1Route
+  '/thank-you/ticket': typeof ThankYouTicketRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/booking/return': typeof BookingReturnRoute
+  '/thank-you/day-1': typeof ThankYouDay1Route
+  '/thank-you/ticket': typeof ThankYouTicketRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/booking/return': typeof BookingReturnRoute
+  '/thank-you/day-1': typeof ThankYouDay1Route
+  '/thank-you/ticket': typeof ThankYouTicketRoute
   '/api/paystack/webhook': typeof ApiPaystackWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/booking/return' | '/api/paystack/webhook'
+  fullPaths:
+    | '/'
+    | '/booking/return'
+    | '/thank-you/day-1'
+    | '/thank-you/ticket'
+    | '/api/paystack/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/booking/return' | '/api/paystack/webhook'
-  id: '__root__' | '/' | '/booking/return' | '/api/paystack/webhook'
+  to:
+    | '/'
+    | '/booking/return'
+    | '/thank-you/day-1'
+    | '/thank-you/ticket'
+    | '/api/paystack/webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/booking/return'
+    | '/thank-you/day-1'
+    | '/thank-you/ticket'
+    | '/api/paystack/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookingReturnRoute: typeof BookingReturnRoute
+  ThankYouDay1Route: typeof ThankYouDay1Route
+  ThankYouTicketRoute: typeof ThankYouTicketRoute
   ApiPaystackWebhookRoute: typeof ApiPaystackWebhookRoute
 }
 
@@ -75,6 +111,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/thank-you/day-1': {
+      id: '/thank-you/day-1'
+      path: '/thank-you/day-1'
+      fullPath: '/thank-you/day-1'
+      preLoaderRoute: typeof ThankYouDay1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thank-you/ticket': {
+      id: '/thank-you/ticket'
+      path: '/thank-you/ticket'
+      fullPath: '/thank-you/ticket'
+      preLoaderRoute: typeof ThankYouTicketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/paystack/webhook': {
       id: '/api/paystack/webhook'
       path: '/api/paystack/webhook'
@@ -88,6 +138,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookingReturnRoute: BookingReturnRoute,
+  ThankYouDay1Route: ThankYouDay1Route,
+  ThankYouTicketRoute: ThankYouTicketRoute,
   ApiPaystackWebhookRoute: ApiPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport
