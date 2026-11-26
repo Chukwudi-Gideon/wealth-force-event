@@ -13,14 +13,24 @@ function parts(target: number, now: number) {
   };
 }
 
-export function Countdown() {
+type Props = {
+  target?: Date;
+  label?: string;
+  doneLabel?: string;
+};
+
+export function Countdown({
+  target = DAY_TWO,
+  label = "Early rate ends 15 November",
+  doneLabel = "Early rate has closed.",
+}: Props) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
-  const left = parts(DAY_TWO.getTime(), now);
+  const left = parts(target.getTime(), now);
   const cells = [
     ["Days", left.days],
     ["Hours", left.hours],
@@ -31,7 +41,7 @@ export function Countdown() {
   return (
     <div className="mt-8 max-w-xl">
       <p className="text-sm font-medium tracking-wide text-sky">
-                {left.done ? "Early rate has closed." : "Early rate ends 15 November"}
+        {left.done ? doneLabel : label}
       </p>
       {!left.done && (
         <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">
