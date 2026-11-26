@@ -3,7 +3,7 @@ import appCss from "../styles.css?url";
 
 const APP_NAME = "Wealth Force 2026 by ROCKBANQ";
 const DESCRIPTION =
-  "Two days that change how your family and your business sees money. Start free online on 27 November, then join 100 seats in Port Harcourt on 28 November.";
+  "Join ROCKBANQ live in Port Harcourt on 28 November 2026. Four speakers, three ticket classes, and a day built to help your family and business build a vault.";
 
 export const Route = createRootRoute({
   head: () => ({

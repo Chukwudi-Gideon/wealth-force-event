@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VirtualRouteImport } from './routes/virtual'
 import { Route as BookingReturnRouteImport } from './routes/booking/return'
 import { Route as ThankYouDay1RouteImport } from './routes/thank-you/day-1'
 import { Route as ThankYouTicketRouteImport } from './routes/thank-you/ticket'
@@ -18,6 +19,11 @@ import { Route as ApiPaystackWebhookRouteImport } from './routes/api/paystack/we
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VirtualRoute = VirtualRouteImport.update({
+  id: '/virtual',
+  path: '/virtual',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingReturnRoute = BookingReturnRouteImport.update({
@@ -43,6 +49,7 @@ const ApiPaystackWebhookRoute = ApiPaystackWebhookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/virtual': typeof VirtualRoute
   '/booking/return': typeof BookingReturnRoute
   '/thank-you/day-1': typeof ThankYouDay1Route
   '/thank-you/ticket': typeof ThankYouTicketRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/virtual': typeof VirtualRoute
   '/booking/return': typeof BookingReturnRoute
   '/thank-you/day-1': typeof ThankYouDay1Route
   '/thank-you/ticket': typeof ThankYouTicketRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/virtual': typeof VirtualRoute
   '/booking/return': typeof BookingReturnRoute
   '/thank-you/day-1': typeof ThankYouDay1Route
   '/thank-you/ticket': typeof ThankYouTicketRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/virtual'
     | '/booking/return'
     | '/thank-you/day-1'
     | '/thank-you/ticket'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/virtual'
     | '/booking/return'
     | '/thank-you/day-1'
     | '/thank-you/ticket'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/virtual'
     | '/booking/return'
     | '/thank-you/day-1'
     | '/thank-you/ticket'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  VirtualRoute: typeof VirtualRoute
   BookingReturnRoute: typeof BookingReturnRoute
   ThankYouDay1Route: typeof ThankYouDay1Route
   ThankYouTicketRoute: typeof ThankYouTicketRoute
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/virtual': {
+      id: '/virtual'
+      path: '/virtual'
+      fullPath: '/virtual'
+      preLoaderRoute: typeof VirtualRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/booking/return': {
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  VirtualRoute: VirtualRoute,
   BookingReturnRoute: BookingReturnRoute,
   ThankYouDay1Route: ThankYouDay1Route,
   ThankYouTicketRoute: ThankYouTicketRoute,

@@ -1,9 +1,10 @@
 import { useEffect, type ReactNode } from "react";
+import { DAY_ONE_WHATSAPP_URL } from "@/lib/event";
 import { metaPixelNoscriptSrc, trackMetaPixel, type MetaPixelEvent } from "@/lib/meta-pixel";
 
 export const DAY_ONE_PIXEL_ID = "892785827219461";
 export const TICKET_PIXEL_ID = "1864181694595716";
-export const DAY_ONE_WHATSAPP_URL = "https://chat.whatsapp.com/IHUuX8RGc1nEPvwEUzdv75";
+export { DAY_ONE_WHATSAPP_URL };
 
 export function greetingName(name?: string) {
   const trimmed = name?.trim().replace(/\s+/g, " ");
