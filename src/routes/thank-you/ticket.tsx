@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CalendarPlus, CheckCircle2, MapPin, Ticket } from "lucide-react";
 import { BrandMark, ThankYouShell, TICKET_PIXEL_ID, greetingName } from "@/components/thank-you-page";
-import { WHATSAPP_URL, naira } from "@/lib/event";
+import { DAY_TWO, DAY_TWO_LABEL, VENUE, WHATSAPP_URL, naira } from "@/lib/event";
+
+const VENUE_LABEL = [VENUE.name, ...VENUE.lines].join(", ");
 
 type Search = { reference?: string; name?: string; amount?: string };
 
@@ -22,11 +24,12 @@ function parseAmount(amount?: string) {
 }
 
 function calendarHref(name?: string, reference?: string) {
+  const dayTwoStamp = DAY_TWO.toISOString().slice(0, 10).replace(/-/g, "");
   const details = [
     "Build a Vault ticket confirmed.",
     name ? `Attendee: ${name}` : null,
     reference ? `Reference: ${reference}` : null,
-    "Venue: Port Harcourt",
+    `Venue: ${VENUE_LABEL}`,
   ]
     .filter(Boolean)
     .join("\\n");
@@ -36,12 +39,12 @@ function calendarHref(name?: string, reference?: string) {
     "PRODID:-//Build a Vault//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
-    "UID:build-a-vault-20261128@rockbanq.com",
+    `UID:build-a-vault-${dayTwoStamp}@rockbanq.com`,
     "DTSTAMP:20261101T000000Z",
-    "DTSTART:20261128T090000Z",
-    "DTEND:20261128T140000Z",
+    `DTSTART:${dayTwoStamp}T090000Z`,
+    `DTEND:${dayTwoStamp}T140000Z`,
     "SUMMARY:Build a Vault - Day 2",
-    "LOCATION:Port Harcourt\\, Nigeria",
+    `LOCATION:${VENUE_LABEL.replace(/,/g, "\\,")}`,
     `DESCRIPTION:${details}`,
     "END:VEVENT",
     "END:VCALENDAR",
@@ -90,9 +93,9 @@ function TicketThankYou() {
 
         <div className="grid gap-0 sm:grid-cols-2">
           <Detail label="Attendee" value={name?.trim() || "Confirmed guest"} />
-          <Detail label="Date" value="28 November 2026" />
+          <Detail label="Date" value={DAY_TWO_LABEL} />
           <Detail label="Time" value="10:00 AM WAT" />
-          <Detail label="Location" value="Port Harcourt" />
+          <Detail label="Location" value={VENUE_LABEL} />
           <Detail label="Reference" value={reference || "Pending confirmation"} />
           <Detail label="Amount paid" value={amountNaira !== undefined ? naira(amountNaira) : "Confirmed"} />
         </div>
@@ -101,7 +104,7 @@ function TicketThankYou() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3 text-sm text-sky">
               <MapPin className="mt-0.5 size-4 shrink-0 text-orange" aria-hidden="true" />
-              <p>Build a Vault · Port Harcourt, Nigeria. Bring this confirmation and your reference if needed.</p>
+              <p>Build a Vault · {VENUE_LABEL}. Bring this confirmation and your reference if needed.</p>
             </div>
             <div className="inline-flex items-center gap-2 self-start rounded-full border border-paper/15 px-3 py-2 text-xs text-sky">
               <Ticket className="size-4 text-orange" aria-hidden="true" />

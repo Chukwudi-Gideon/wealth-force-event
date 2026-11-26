@@ -1,4 +1,4 @@
-import { BANK, CEO_EMAIL, feeNaira, naira, tierById } from "./event";
+import { BANK, CEO_EMAIL, DAY_TWO_LABEL, VENUE, feeNaira, naira, tierById } from "./event";
 
 export type GuestKind = "paid" | "waitlist";
 
@@ -130,7 +130,7 @@ async function sendTeamEmail(args: {
     `Reference: ${args.reference}`,
     args.guest.kind === "paid" ? `Amount: ${naira(args.amount)}` : "Amount: free",
     args.guest.kind === "paid"
-      ? "Event: Day 2 · 28 November 2026 · Business Masterclass · Port Harcourt"
+      ? `Event: Day 2 · ${DAY_TWO_LABEL} · Business Masterclass · ${VENUE.name}, Port Harcourt`
       : "Event: Day 1 · 27 November 2026 · Free virtual day",
     "",
     `Invoice: ${args.reference}`,
