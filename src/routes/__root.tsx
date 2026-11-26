@@ -1,9 +1,10 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { DAY_TWO_LABEL } from "@/lib/event";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Wealth Force 2026 by ROCKBANQ";
 const DESCRIPTION =
-  "Join ROCKBANQ live in Port Harcourt on 28 November 2026. Four speakers, three ticket classes, and a day built to help your family and business build a vault.";
+  `Join ROCKBANQ live in Port Harcourt on ${DAY_TWO_LABEL}. Four speakers, three ticket classes, and a day built to help your family and business build a vault.`;
 
 export const Route = createRootRoute({
   head: () => ({

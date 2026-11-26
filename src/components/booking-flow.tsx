@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { joinDayOne, startCheckout } from "@/lib/checkout.functions";
-import { WHATSAPP_URL, naira, tierById, type TierId } from "@/lib/event";
+import { DAY_TWO_LABEL, WHATSAPP_URL, naira, tierById, type TierId } from "@/lib/event";
 
 type Mode = "waitlist" | TierId;
 type Props = {
@@ -110,7 +110,7 @@ export function BookingFlow({ mode, onClose }: Props) {
             <p className="text-sm text-sky">
               {mode === "waitlist"
                 ? "Day 1 · 27 November 2026 · Free virtual day"
-                : `${tier?.name} · ${tier?.classLabel} · 28 November 2026`}
+                : `${tier?.name} · ${tier?.classLabel} · ${DAY_TWO_LABEL}`}
             </p>
             {mode !== "waitlist" && tier && (
               <div className="rounded-2xl border border-orange/40 bg-orange/15 px-4 py-3">

@@ -5,6 +5,7 @@ import { BookingFlow } from "@/components/booking-flow";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  DAY_TWO_LABEL,
   INCLUDED,
   PILLARS,
   SPEAKERS,
@@ -44,7 +45,7 @@ export function PaidEventPage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg text-sky">
             The room where your family and your business learn to see money differently. Join us live in Port
-            Harcourt on 28 November.
+            Harcourt on {DAY_TWO_LABEL}.
           </p>
           <Countdown />
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -62,7 +63,7 @@ export function PaidEventPage() {
             </a>
           </div>
           <p className="mt-6 text-sm text-sky">
-            Day 2 · 28 November 2026 · Port Harcourt · 10AM
+            Day 2 · {DAY_TWO_LABEL} · Port Harcourt · 10AM
           </p>
         </div>
       </section>
@@ -113,7 +114,7 @@ export function PaidEventPage() {
           <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
             Four voices. <span className="text-orange">One stage.</span>
           </h2>
-          <p className="mt-3 max-w-2xl text-sky">In the room on 28 November.</p>
+          <p className="mt-3 max-w-2xl text-sky">In the room on {DAY_TWO_LABEL}.</p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {SPEAKERS.map((speaker) => (
               <article
@@ -144,7 +145,7 @@ export function PaidEventPage() {
               Our home for <span className="text-purple">the day.</span>
             </h2>
             <p className="mt-4 text-lg text-muted">
-              Join us in person at ROCKBANQ in Port Harcourt, a room made for conversations that matter.
+              Join us in person at {VENUE.name} in Port Harcourt, a room made for conversations that matter.
             </p>
           </div>
           <div className="rounded-3xl bg-paper p-7 shadow-sm">
@@ -173,13 +174,13 @@ export function PaidEventPage() {
           <h2 className="mt-3 text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
             Choose your <span className="text-orange">ticket.</span>
           </h2>
-          <p className="mt-3 max-w-xl text-sky">28 November 2026 · Port Harcourt · 10AM. Three ways to join the room.</p>
+          <p className="mt-3 max-w-xl text-sky">{DAY_TWO_LABEL} · Port Harcourt · 10AM. Three ways to join the room.</p>
           <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
             {TIERS.map((tier) => (
               <article key={tier.id} className="flex flex-col rounded-3xl border border-orange/40 bg-paper/5 p-7">
                 <p className="text-xs font-medium tracking-widest text-orange uppercase">{tier.classLabel}</p>
                 <h3 className="mt-3 text-2xl font-medium">{tier.name}</h3>
-                <p className="mt-2 text-sky">28 November 2026 · Port Harcourt · 10AM</p>
+                <p className="mt-2 text-sky">{DAY_TWO_LABEL} · Port Harcourt · 10AM</p>
                 <div className="mt-4 flex items-baseline gap-3">
                   <p className="text-3xl font-medium text-orange">{naira(tier.amount)}</p>
                   <p className="text-lg text-sky/70 line-through">{naira(tier.originalAmount)}</p>

@@ -19,11 +19,7 @@ type Props = {
   doneLabel?: string;
 };
 
-export function Countdown({
-  target = DAY_TWO,
-  label = "Early rate ends 15 November",
-  doneLabel = "Early rate has closed.",
-}: Props) {
+export function Countdown({ target = DAY_TWO, label, doneLabel }: Props) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -31,6 +27,7 @@ export function Countdown({
     return () => window.clearInterval(id);
   }, []);
   const left = parts(target.getTime(), now);
+  const caption = left.done ? doneLabel : label;
   const cells = [
     ["Days", left.days],
     ["Hours", left.hours],
@@ -40,11 +37,9 @@ export function Countdown({
 
   return (
     <div className="mt-8 max-w-xl">
-      <p className="text-sm font-medium tracking-wide text-sky">
-        {left.done ? doneLabel : label}
-      </p>
+      {caption && <p className="text-sm font-medium tracking-wide text-sky">{caption}</p>}
       {!left.done && (
-        <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">
+        <div className={`grid grid-cols-4 gap-2${caption ? " mt-3" : ""}`} aria-live="polite">
           {cells.map(([label, value]) => (
             <div key={label} className="rounded-2xl border border-paper/15 bg-paper/10 px-2 py-3 text-center">
               <div className="text-2xl font-medium text-paper tabular-nums sm:text-3xl" suppressHydrationWarning>

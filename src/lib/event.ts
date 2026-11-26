@@ -6,14 +6,10 @@ export const DAY_ONE_WHATSAPP_URL = "https://chat.whatsapp.com/IHUuX8RGc1nEPvwEU
 export const CEO_EMAIL = "sarah@rockbanq.com";
 
 export const VENUE = {
-  name: "ROCKBANQ",
-  lines: [
-    "PH Tower, 21 Kaduna Street",
-    "37 Aba Road, by Leventis Junction",
-    "Port Harcourt, Rivers State, Nigeria",
-  ],
+  name: "People's Club Event Center",
+  lines: ["40 Rumola Road", "Port Harcourt, Rivers State"],
   mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=PH+Tower+21+Kaduna+Street+37+Aba+Road+by+Leventis+Junction+Port+Harcourt",
+    "https://www.google.com/maps/search/?api=1&query=People%27s+Club+Event+Center+40+Rumola+Road+Port+Harcourt+Rivers+State",
 };
 
 export const BANK = {
@@ -22,10 +18,9 @@ export const BANK = {
   accountName: "ROCKBANQ LTD",
 };
 
-/** 15 November 2026, 23:59:59 West Africa Time (UTC+1). */
-export const EARLY_CUTOFF = new Date("2026-11-15T22:59:59.000Z");
 export const DAY_ONE = new Date("2026-11-27T08:00:00.000Z");
-export const DAY_TWO = new Date("2026-11-28T08:00:00.000Z");
+export const DAY_TWO = new Date("2026-12-12T08:00:00.000Z");
+export const DAY_TWO_LABEL = "12 December 2026";
 
 export const TIERS = [
   { id: "executive", name: "The Asset Holder", classLabel: "Executive Class", amount: 25_000, originalAmount: 50_000 },
