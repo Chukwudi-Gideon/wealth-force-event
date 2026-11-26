@@ -2,7 +2,7 @@ export const SUPPORT_EMAIL = "support@rockbanq.com";
 export const SUPPORT_PHONE = "+234 9049989801";
 export const SUPPORT_PHONE_TEL = "+2349049989801";
 export const WHATSAPP_URL = "https://wa.me/2349049989801";
-export const DAY_ONE_WHATSAPP_URL = "https://chat.whatsapp.com/IHUuX8RGc1nEPvwEUzdv75";
+export const DAY_ONE_WHATSAPP_URL = "https://chat.whatsapp.com/GSrwjv5UuP19eKQtUeTqNQ";
 export const CEO_EMAIL = "sarah@rockbanq.com";
 
 export const VENUE = {

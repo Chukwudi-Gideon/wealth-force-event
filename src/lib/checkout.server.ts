@@ -1,4 +1,4 @@
-import { BANK, CEO_EMAIL, DAY_TWO_LABEL, VENUE, feeNaira, naira, tierById } from "./event";
+import { BANK, CEO_EMAIL, DAY_ONE_WHATSAPP_URL, DAY_TWO_LABEL, VENUE, feeNaira, naira, tierById } from "./event";
 
 export type GuestKind = "paid" | "waitlist";
 
@@ -123,7 +123,7 @@ async function sendTeamEmail(args: {
     statusLine,
     "",
     `Name: ${args.guest.name}`,
-    args.status === "waitlist" ? `Group link sent: ${DAY_ONE_WHATSAPP}` : "",
+    args.status === "waitlist" ? `Group link sent: ${DAY_ONE_WHATSAPP_URL}` : "",
     `Email: ${args.guest.email}`,
     `Phone: ${args.guest.phone || "—"}`,
     args.ticket ? `Ticket: ${args.ticket}` : "",
@@ -175,7 +175,6 @@ async function sendTeamEmail(args: {
   }
   return { emailed: true };
 }
-const DAY_ONE_WHATSAPP = "https://chat.whatsapp.com/GSrwjv5UuP19eKQtUeTqNQ";
 
 async function sendDayOneEmail(guest: GuestInput): Promise<{ emailed: boolean; emailError?: string }> {
   const key = resendKey();
@@ -189,7 +188,7 @@ async function sendDayOneEmail(guest: GuestInput): Promise<{ emailed: boolean; e
     "Day 1 is free and virtual on 27 November 2026.",
     "",
     "Join the WhatsApp group here:",
-    DAY_ONE_WHATSAPP,
+    DAY_ONE_WHATSAPP_URL,
     "",
     "That’s where the link and updates will be shared.",
     "",
